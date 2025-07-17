@@ -5,4 +5,5 @@
 [node name="Main" type="Node"]
 
 [node name="Player" parent="." instance=ExtResource("1_o5qli")]
-position = Vector2(960, 540)
+position = Vector2(480, 540)
+jump_velocity = -600.0
