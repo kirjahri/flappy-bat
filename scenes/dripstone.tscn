@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://dkr2xkovggd1v"]
+
+[ext_resource type="Texture2D" uid="uid://cb4tv15ypmyo3" path="res://assets/sprites/dripstone.png" id="1_xb8k7"]
+
+[node name="Area2D" type="Area2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_xb8k7")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(7, 39, 7, -1, 0, -35, -7, -1, -7, 39)
