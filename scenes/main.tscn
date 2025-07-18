@@ -1,11 +1,14 @@
-[gd_scene load_steps=5 format=3 uid="uid://e5k8yykw44jb"]
+[gd_scene load_steps=7 format=3 uid="uid://e5k8yykw44jb"]
 
 [ext_resource type="Script" uid="uid://prem0dk7od71" path="res://scripts/main.gd" id="1_0wfyh"]
 [ext_resource type="PackedScene" uid="uid://byn03koj8bqtk" path="res://scenes/player.tscn" id="1_o5qli"]
 [ext_resource type="PackedScene" uid="uid://cwuceigf4buye" path="res://scenes/dripstones.tscn" id="2_sugp2"]
+[ext_resource type="PackedScene" uid="uid://cl1l5qxj85lyg" path="res://scenes/kill_zone.tscn" id="4_jyhfs"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_sugp2"]
 normal = Vector2(1, 0)
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_tbgi4"]
 
 [node name="Main" type="Node" node_paths=PackedStringArray("destroy_area", "timer")]
 script = ExtResource("1_0wfyh")
@@ -27,3 +30,9 @@ position = Vector2(-500, 0)
 shape = SubResource("WorldBoundaryShape2D_sugp2")
 
 [node name="DripstonesTimer" type="Timer" parent="."]
+
+[node name="KillZone" parent="." instance=ExtResource("4_jyhfs")]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="KillZone"]
+position = Vector2(0, 1280)
+shape = SubResource("WorldBoundaryShape2D_tbgi4")
