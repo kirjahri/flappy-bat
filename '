@@ -12,21 +12,16 @@ extends Node
 @export var y_min: float
 @export var y_max: float
 
-@export_subgroup("Speed")
-@export_range(1, 10, 0.2) var added_speed: float = 5.0
-
 @export_group("GUI")
 @export var gui: Control
 
 var score: int = 0
-var dripstones_speed: float
+var dripstones_speed: float = 600.0
 
 
 func _ready() -> void:
 	if scene == null:
 		push_warning("The dripstones scene has not been assigned in the editor")
-
-	dripstones_speed = scene.instantiate().speed
 
 	destroy_area.area_entered.connect(_on_area_entered)
 	timer.timeout.connect(_on_timer_timeout)
@@ -54,9 +49,8 @@ func _on_point_scored() -> void:
 	score += 1
 	score_label.text = str(score)
 
-	dripstones_speed += added_speed
-	print(dripstones_speed)
+	dripstones_speed += score * 5
 
-	# Make sure that existing dripstones have their speed changed too
+	# Make sure that the existing dripstones have their speed changed too
 	for node: Node in get_tree().get_nodes_in_group("dripstones"):
 		node.speed = dripstones_speed

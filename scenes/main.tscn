@@ -32,6 +32,7 @@ position = Vector2(-500, 0)
 shape = SubResource("WorldBoundaryShape2D_sugp2")
 
 [node name="DripstonesTimer" type="Timer" parent="."]
+wait_time = 0.8
 
 [node name="KillZone" parent="." instance=ExtResource("4_jyhfs")]
 
