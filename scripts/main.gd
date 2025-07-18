@@ -12,6 +12,11 @@ extends Node
 @export var y_min: float
 @export var y_max: float
 
+@export_group("GUI")
+@export var gui: Control
+
+var score: int = 0
+
 
 func _ready() -> void:
 	if scene == null:
@@ -32,5 +37,12 @@ func _on_timer_timeout() -> void:
 
 	dripstones.scale = Vector2(10, 10)
 	dripstones.position = Vector2(x, randf_range(y_min, y_max))
+	dripstones.point_scored.connect(_on_point_scored)
 
 	self.add_child(dripstones)
+
+
+func _on_point_scored() -> void:
+	var score_label: Label = gui.get_node("%ScoreLabel")
+	score += 1
+	score_label.text = str(score)

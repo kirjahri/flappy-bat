@@ -1,16 +1,17 @@
-[gd_scene load_steps=7 format=3 uid="uid://e5k8yykw44jb"]
+[gd_scene load_steps=8 format=3 uid="uid://e5k8yykw44jb"]
 
 [ext_resource type="Script" uid="uid://prem0dk7od71" path="res://scripts/main.gd" id="1_0wfyh"]
 [ext_resource type="PackedScene" uid="uid://byn03koj8bqtk" path="res://scenes/player.tscn" id="1_o5qli"]
 [ext_resource type="PackedScene" uid="uid://cwuceigf4buye" path="res://scenes/dripstones.tscn" id="2_sugp2"]
 [ext_resource type="PackedScene" uid="uid://cl1l5qxj85lyg" path="res://scenes/kill_zone.tscn" id="4_jyhfs"]
+[ext_resource type="PackedScene" uid="uid://colf2nk0hqfsq" path="res://scenes/gui.tscn" id="5_tbgi4"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_sugp2"]
 normal = Vector2(1, 0)
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_tbgi4"]
 
-[node name="Main" type="Node" node_paths=PackedStringArray("destroy_area", "timer")]
+[node name="Main" type="Node" node_paths=PackedStringArray("destroy_area", "timer", "gui")]
 script = ExtResource("1_0wfyh")
 scene = ExtResource("2_sugp2")
 destroy_area = NodePath("DripstonesDestroyArea")
@@ -18,6 +19,7 @@ timer = NodePath("DripstonesTimer")
 x = 2120.0
 y_min = 350.0
 y_max = 750.0
+gui = NodePath("CanvasLayer/GUI")
 
 [node name="Player" parent="." instance=ExtResource("1_o5qli")]
 position = Vector2(480, 540)
@@ -36,3 +38,8 @@ shape = SubResource("WorldBoundaryShape2D_sugp2")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="KillZone"]
 position = Vector2(0, 1280)
 shape = SubResource("WorldBoundaryShape2D_tbgi4")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="GUI" parent="CanvasLayer" instance=ExtResource("5_tbgi4")]
+unique_name_in_owner = true

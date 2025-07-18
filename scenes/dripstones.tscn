@@ -6,8 +6,9 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_peu2f"]
 size = Vector2(2, 20)
 
-[node name="Dripstones" type="Node2D"]
+[node name="Dripstones" type="Node2D" node_paths=PackedStringArray("score_area")]
 script = ExtResource("1_peu2f")
+score_area = NodePath("ScoreArea")
 
 [node name="Dripstone" parent="." instance=ExtResource("1_56cwe")]
 position = Vector2(0, -50)
