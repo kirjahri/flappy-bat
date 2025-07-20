@@ -1,11 +1,11 @@
 extends Node
 
+@export var spawn_timer: Timer
+
 @export_group("Dripstones")
 
-@export_subgroup("Nodes")
 @export var dripstones_scene: PackedScene
 @export var destroy_area: Area2D
-@export var timer: Timer
 
 @export_subgroup("Spawn Position")
 @export var x: float
@@ -20,25 +20,21 @@ extends Node
 
 @export_group("Orb")
 @export var orb_scene: PackedScene
-@export var spawn_odds: float = 1.0 / 3.0
+@export var orb_scale: Vector2 = Vector2(2.5, 2.5)
+@export var spawn_rate: float = 1.0 / 3.0
+
+# Defines how many seconds the animation that limits the player's vision is set back by orbs (0.0 restores nothing, 20.0 restores it all).
+@export_range(0, 20, 0.2) var seconds_restored: float = 2.0
 
 @export_subgroup("Spawn Position")
 @export var added_x_range_min: float = 100.0
 @export var added_x_range_max: float = 400.0
 
-@export_subgroup("Scale")
-@export var orb_scale: Vector2 = Vector2(2.5, 2.5)
-
-@export_group("GUI")
-@export var gui: Control
-
 @export_group("Player")
 @export var player: CharacterBody2D
 
-@export_subgroup("Vision")
-
-# Defines how many seconds the animation that limits the player's vision is set back (0.0 restores nothing, 20.0 restores it all).
-@export_range(0, 20, 0.2) var seconds_restored: float = 2.0
+@export_group("GUI")
+@export var gui: Control
 
 var score: int = 0
 var dripstones_speed: float
@@ -48,9 +44,9 @@ func _ready() -> void:
 	dripstones_speed = dripstones_scene.instantiate().speed
 
 	destroy_area.area_entered.connect(_on_area_entered)
-	timer.timeout.connect(_on_timer_timeout)
+	spawn_timer.timeout.connect(_on_timer_timeout)
 
-	timer.start()
+	spawn_timer.start()
 
 
 func _on_area_entered(area: Area2D) -> void:
@@ -65,7 +61,7 @@ func _on_timer_timeout() -> void:
 	dripstones.speed = dripstones_speed
 	dripstones.point_scored.connect(_on_point_scored)
 
-	if randf() < spawn_odds:
+	if randf() < spawn_rate:
 		var orb: Area2D = orb_scene.instantiate()
 
 		orb.scale = orb_scale
