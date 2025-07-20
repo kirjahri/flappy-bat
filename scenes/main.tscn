@@ -25,9 +25,11 @@ y_min = 350.0
 y_max = 750.0
 added_speed = 3.0
 orb_scene = ExtResource("3_tefeu")
+spawn_odds = 0.2
 added_x_range_max = 300.0
 gui = NodePath("CanvasLayer/GUI")
 player = NodePath("Player")
+seconds_restored = 5.0
 
 [node name="DripstonesTimer" type="Timer" parent="."]
 wait_time = 0.8
