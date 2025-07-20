@@ -7,13 +7,13 @@
 [ext_resource type="PackedScene" uid="uid://cl1l5qxj85lyg" path="res://scenes/kill_zone.tscn" id="4_jyhfs"]
 [ext_resource type="PackedScene" uid="uid://colf2nk0hqfsq" path="res://scenes/gui.tscn" id="5_tbgi4"]
 
-[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_sugp2"]
-normal = Vector2(1, 0)
-
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_tbgi4"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_tefeu"]
 normal = Vector2(0, 1)
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_sugp2"]
+normal = Vector2(1, 0)
 
 [node name="Main" type="Node" node_paths=PackedStringArray("destroy_area", "timer", "gui")]
 script = ExtResource("1_0wfyh")
@@ -25,16 +25,6 @@ y_min = 350.0
 y_max = 750.0
 orb_scene = ExtResource("3_tefeu")
 gui = NodePath("CanvasLayer/GUI")
-
-[node name="Player" parent="." instance=ExtResource("1_o5qli")]
-position = Vector2(480, 540)
-jump_velocity = -600.0
-
-[node name="DripstonesDestroyArea" type="Area2D" parent="."]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="DripstonesDestroyArea"]
-position = Vector2(-500, 0)
-shape = SubResource("WorldBoundaryShape2D_sugp2")
 
 [node name="DripstonesTimer" type="Timer" parent="."]
 wait_time = 0.8
@@ -49,6 +39,26 @@ shape = SubResource("WorldBoundaryShape2D_tbgi4")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="KillZone2"]
 shape = SubResource("WorldBoundaryShape2D_tefeu")
+
+[node name="DripstonesDestroyArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DripstonesDestroyArea"]
+position = Vector2(-500, 0)
+shape = SubResource("WorldBoundaryShape2D_sugp2")
+
+[node name="Background" type="ColorRect" parent="."]
+z_index = -1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.35, 0.208892, 0.1435, 1)
+metadata/_edit_use_anchors_ = true
+
+[node name="Player" parent="." instance=ExtResource("1_o5qli")]
+position = Vector2(480, 540)
+jump_velocity = -600.0
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
