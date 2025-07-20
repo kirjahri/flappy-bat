@@ -15,21 +15,21 @@ normal = Vector2(0, 1)
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_sugp2"]
 normal = Vector2(1, 0)
 
-[node name="Main" type="Node" node_paths=PackedStringArray("destroy_area", "timer", "gui", "player")]
+[node name="Main" type="Node" node_paths=PackedStringArray("spawn_timer", "destroy_area", "player", "gui")]
 script = ExtResource("1_0wfyh")
+spawn_timer = NodePath("DripstonesTimer")
 dripstones_scene = ExtResource("2_sugp2")
 destroy_area = NodePath("DripstonesDestroyArea")
-timer = NodePath("DripstonesTimer")
 x = 2120.0
 y_min = 350.0
 y_max = 750.0
 added_speed = 3.0
 orb_scene = ExtResource("3_tefeu")
-spawn_odds = 0.2
-added_x_range_max = 300.0
-gui = NodePath("CanvasLayer/GUI")
-player = NodePath("Player")
+spawn_rate = 0.2
 seconds_restored = 5.0
+added_x_range_max = 300.0
+player = NodePath("Player")
+gui = NodePath("CanvasLayer/GUI")
 
 [node name="DripstonesTimer" type="Timer" parent="."]
 wait_time = 0.8
