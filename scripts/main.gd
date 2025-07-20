@@ -20,7 +20,7 @@ extends Node
 
 @export_group("Orb")
 @export var orb_scene: PackedScene
-@export var spawn_odds: float = 0.2
+@export var spawn_odds: float = 1.0 / 3.0
 
 @export_subgroup("Spawn Position")
 @export var added_x_range_min: float = 100.0
@@ -31,6 +31,14 @@ extends Node
 
 @export_group("GUI")
 @export var gui: Control
+
+@export_group("Player")
+@export var player: CharacterBody2D
+
+@export_subgroup("Vision")
+
+# Defines how many seconds the animation that limits the player's vision is set back (0.0 restores nothing, 20.0 restores it all).
+@export_range(0, 20, 0.2) var seconds_restored: float = 2.0
 
 var score: int = 0
 var dripstones_speed: float
@@ -92,4 +100,9 @@ func _on_point_scored() -> void:
 
 
 func _on_orb_collected() -> void:
-	increment_score(1)
+	var animation_player: AnimationPlayer = player.get_node("AnimationPlayer")
+	var current_position: float = animation_player.current_animation_position
+
+	# Play the `"lose_vision"` animation starting from the previous current position minus `seconds_restored` until the end
+	animation_player.stop()
+	animation_player.play_section("lose_vision", current_position - seconds_restored, -1.0)

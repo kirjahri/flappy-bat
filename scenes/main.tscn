@@ -15,7 +15,7 @@ normal = Vector2(0, 1)
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_sugp2"]
 normal = Vector2(1, 0)
 
-[node name="Main" type="Node" node_paths=PackedStringArray("destroy_area", "timer", "gui")]
+[node name="Main" type="Node" node_paths=PackedStringArray("destroy_area", "timer", "gui", "player")]
 script = ExtResource("1_0wfyh")
 dripstones_scene = ExtResource("2_sugp2")
 destroy_area = NodePath("DripstonesDestroyArea")
@@ -23,11 +23,17 @@ timer = NodePath("DripstonesTimer")
 x = 2120.0
 y_min = 350.0
 y_max = 750.0
+added_speed = 3.0
 orb_scene = ExtResource("3_tefeu")
+added_x_range_max = 300.0
 gui = NodePath("CanvasLayer/GUI")
+player = NodePath("Player")
 
 [node name="DripstonesTimer" type="Timer" parent="."]
 wait_time = 0.8
+
+[node name="LightTimer" type="Timer" parent="."]
+wait_time = 50.0
 
 [node name="KillZone" parent="." instance=ExtResource("4_jyhfs")]
 
@@ -64,3 +70,7 @@ jump_velocity = -600.0
 
 [node name="GUI" parent="CanvasLayer" instance=ExtResource("5_tbgi4")]
 unique_name_in_owner = true
+
+[node name="CanvasModulate" type="CanvasModulate" parent="."]
+light_mask = 3
+color = Color(0, 0, 0, 1)

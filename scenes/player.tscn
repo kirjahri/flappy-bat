@@ -1,14 +1,62 @@
-[gd_scene load_steps=3 format=3 uid="uid://byn03koj8bqtk"]
+[gd_scene load_steps=7 format=3 uid="uid://byn03koj8bqtk"]
 
 [ext_resource type="Script" uid="uid://csx0hry5oj5wl" path="res://scripts/player.gd" id="1_g2els"]
 [ext_resource type="Texture2D" uid="uid://b2h5alyflo51f" path="res://assets/sprites/bat.png" id="2_g2els"]
+[ext_resource type="Texture2D" uid="uid://d1txoe7troe3i" path="res://assets/sprites/light.png" id="3_qhqgy"]
 
-[node name="Player" type="CharacterBody2D"]
+[sub_resource type="Animation" id="Animation_dqkch"]
+resource_name = "lose_vision"
+length = 30.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PointLight2D:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 30),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(50, 50), Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_qlg0r"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PointLight2D:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(50, 50)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_tuyoq"]
+_data = {
+&"RESET": SubResource("Animation_qlg0r"),
+&"lose_vision": SubResource("Animation_dqkch")
+}
+
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("animation_player")]
 scale = Vector2(5, 5)
 script = ExtResource("1_g2els")
+animation_player = NodePath("AnimationPlayer")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("2_g2els")
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
 polygon = PackedVector2Array(7, -3, 3, -3, 0, -5, -3, -5, -7, -1, -8, 2, -7, 4, 0, 4, 0, 6, 4, 6, 4, 4, 7, 2)
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+scale = Vector2(50, 50)
+texture = ExtResource("3_qhqgy")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_tuyoq")
+}
