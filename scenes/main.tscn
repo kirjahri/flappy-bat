@@ -34,9 +34,6 @@ gui = NodePath("CanvasLayer/GUI")
 [node name="DripstonesTimer" type="Timer" parent="."]
 wait_time = 0.8
 
-[node name="LightTimer" type="Timer" parent="."]
-wait_time = 50.0
-
 [node name="KillZone" parent="." instance=ExtResource("4_jyhfs")]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="KillZone"]
