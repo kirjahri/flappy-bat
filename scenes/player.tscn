@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://csx0hry5oj5wl" path="res://scripts/player.gd" id="1_g2els"]
 [ext_resource type="Texture2D" uid="uid://b2h5alyflo51f" path="res://assets/sprites/bat.png" id="2_g2els"]
-[ext_resource type="Texture2D" uid="uid://ble0u3qlsc43l" path="res://assets/sprites/light.svg" id="3_qhqgy"]
+[ext_resource type="Texture2D" uid="uid://cer6vberudn13" path="res://assets/sprites/light.svg" id="3_qhqgy"]
 
 [sub_resource type="Animation" id="Animation_qlg0r"]
 length = 0.001

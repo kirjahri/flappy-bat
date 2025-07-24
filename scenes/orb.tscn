@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://dua0n4fheov00" path="res://assets/sprites/yellow-orb.png" id="1_ktqa0"]
 [ext_resource type="Script" uid="uid://cwi7yfmq7d77f" path="res://scripts/orb.gd" id="1_ubfm6"]
-[ext_resource type="Texture2D" uid="uid://ble0u3qlsc43l" path="res://assets/sprites/light.svg" id="3_g6cbt"]
+[ext_resource type="Texture2D" uid="uid://cer6vberudn13" path="res://assets/sprites/light.svg" id="3_g6cbt"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_ubfm6"]
 radius = 6.0
