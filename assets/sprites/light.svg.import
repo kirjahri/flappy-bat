@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d1txoe7troe3i"
-path="res://.godot/imported/light.png-83cf24ce88accf68a5e4af85b78c0938.ctex"
+uid="uid://ble0u3qlsc43l"
+path="res://.godot/imported/light.svg-0f2d82bfa2bde24300184ed4d352ebb7.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/light.png"
-dest_files=["res://.godot/imported/light.png-83cf24ce88accf68a5e4af85b78c0938.ctex"]
+source_file="res://assets/sprites/light.svg"
+dest_files=["res://.godot/imported/light.svg-0f2d82bfa2bde24300184ed4d352ebb7.ctex"]
 
 [params]
 
@@ -32,3 +32,6 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
+svg/scale=1.0
+editor/scale_with_editor_scale=false
+editor/convert_colors_with_editor_theme=false
