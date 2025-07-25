@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://e5k8yykw44jb"]
+[gd_scene load_steps=11 format=3 uid="uid://e5k8yykw44jb"]
 
 [ext_resource type="Script" uid="uid://prem0dk7od71" path="res://scripts/main.gd" id="1_0wfyh"]
 [ext_resource type="PackedScene" uid="uid://byn03koj8bqtk" path="res://scenes/player.tscn" id="1_o5qli"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://by0077tgv1o31" path="res://scenes/orb.tscn" id="3_tefeu"]
 [ext_resource type="PackedScene" uid="uid://cl1l5qxj85lyg" path="res://scenes/kill_zone.tscn" id="4_jyhfs"]
 [ext_resource type="PackedScene" uid="uid://colf2nk0hqfsq" path="res://scenes/hud.tscn" id="5_tbgi4"]
+[ext_resource type="PackedScene" uid="uid://dwo685swb2ii7" path="res://scenes/game_over.tscn" id="7_o6xl0"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_tbgi4"]
 
@@ -15,9 +16,10 @@ normal = Vector2(0, 1)
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_sugp2"]
 normal = Vector2(1, 0)
 
-[node name="Main" type="Node" node_paths=PackedStringArray("spawn_timer", "destroy_area", "player", "gui")]
+[node name="Main" type="Node" node_paths=PackedStringArray("spawn_timer", "canvas_modulate", "destroy_area", "player", "hud", "hud_layer", "death_timer", "game_over", "game_over_layer")]
 script = ExtResource("1_0wfyh")
 spawn_timer = NodePath("DripstonesTimer")
+canvas_modulate = NodePath("CanvasModulate")
 dripstones_scene = ExtResource("2_sugp2")
 destroy_area = NodePath("DripstonesDestroyArea")
 x = 2120.0
@@ -29,10 +31,18 @@ spawn_rate = 0.2
 seconds_restored = 5.0
 added_x_range_max = 300.0
 player = NodePath("Player")
-gui = NodePath("HUDLayer/HUD")
+hud = NodePath("HUDLayer/HUD")
+hud_layer = NodePath("HUDLayer")
+death_timer = NodePath("DeathTimer")
+game_over = NodePath("GameOverLayer/GameOver")
+game_over_layer = NodePath("GameOverLayer")
 
 [node name="DripstonesTimer" type="Timer" parent="."]
 wait_time = 0.8
+
+[node name="DeathTimer" type="Timer" parent="."]
+wait_time = 0.001
+one_shot = true
 
 [node name="KillZone" parent="." instance=ExtResource("4_jyhfs")]
 
@@ -65,11 +75,17 @@ metadata/_edit_use_anchors_ = true
 position = Vector2(480, 540)
 jump_velocity = -600.0
 
+[node name="CanvasModulate" type="CanvasModulate" parent="."]
+light_mask = 3
+color = Color(0, 0, 0, 1)
+
 [node name="HUDLayer" type="CanvasLayer" parent="."]
 
 [node name="HUD" parent="HUDLayer" instance=ExtResource("5_tbgi4")]
 unique_name_in_owner = true
 
-[node name="CanvasModulate" type="CanvasModulate" parent="."]
-light_mask = 3
-color = Color(0, 0, 0, 1)
+[node name="GameOverLayer" type="CanvasLayer" parent="."]
+layer = 2
+visible = false
+
+[node name="GameOver" parent="GameOverLayer" instance=ExtResource("7_o6xl0")]

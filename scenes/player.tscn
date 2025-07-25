@@ -41,7 +41,7 @@ _data = {
 &"lose_vision": SubResource("Animation_dqkch")
 }
 
-[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("animation_player")]
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("animation_player") groups=["player"]]
 scale = Vector2(5, 5)
 script = ExtResource("1_g2els")
 animation_player = NodePath("AnimationPlayer")

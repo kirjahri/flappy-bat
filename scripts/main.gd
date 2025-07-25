@@ -1,6 +1,7 @@
 extends Node
 
 @export var spawn_timer: Timer
+@export var canvas_modulate: CanvasModulate
 
 @export_group("Dripstones")
 
@@ -24,7 +25,7 @@ extends Node
 @export var spawn_rate: float = 1.0 / 3.0
 
 # Defines how many seconds the animation that limits the player's vision is set back by orbs (0.0 restores nothing, 20.0 restores it all).
-@export_range(0, 20, 0.2) var seconds_restored: float = 2.0
+@export_range(0, 30, 0.2) var seconds_restored: float = 2.0
 
 @export_subgroup("Spawn Position")
 @export var added_x_range_min: float = 100.0
@@ -33,51 +34,45 @@ extends Node
 @export_group("Player")
 @export var player: CharacterBody2D
 
-@export_group("GUI")
-@export var gui: Control
+@export_group("HUD")
+@export var hud: Control
+@export var hud_layer: CanvasLayer
+
+@export_group("Game Over")
+@export var death_timer: Timer
+
+@export_subgroup("UI")
+@export var game_over: Control
+@export var game_over_layer: CanvasLayer
 
 var score: int = 0
 var dripstones_speed: float
+
+@onready var retry_button: Button = game_over.get_node("%RetryButton")
 
 
 func _ready() -> void:
 	dripstones_speed = dripstones_scene.instantiate().speed
 
 	destroy_area.area_entered.connect(_on_area_entered)
-	spawn_timer.timeout.connect(_on_timer_timeout)
+	spawn_timer.timeout.connect(_on_spawn_timer_timeout)
+	death_timer.timeout.connect(_on_death_timer_timeout)
 
 	spawn_timer.start()
+
+
+func _process(_delta: float) -> void:
+	for kill_zone: Area2D in get_tree().get_nodes_in_group("kill_zone"):
+		if not kill_zone.is_connected("body_entered", _on_body_entered):
+			kill_zone.body_entered.connect(_on_body_entered)
 
 
 func _on_area_entered(area: Area2D) -> void:
 	area.queue_free()
 
 
-func _on_timer_timeout() -> void:
-	var dripstones: Node2D = dripstones_scene.instantiate()
-
-	dripstones.scale = dripstones_scale
-	dripstones.position = Vector2(x, randf_range(y_min, y_max))
-	dripstones.speed = dripstones_speed
-	dripstones.point_scored.connect(_on_point_scored)
-
-	if randf() < spawn_rate:
-		var orb: Area2D = orb_scene.instantiate()
-
-		orb.scale = orb_scale
-		orb.position = Vector2(
-			x + randf_range(added_x_range_min, added_x_range_max), randf_range(y_min, y_max)
-		)
-		orb.speed = dripstones_speed
-		orb.orb_collected.connect(_on_orb_collected)
-
-		self.add_child(orb)
-
-	self.add_child(dripstones)
-
-
 func increment_score(amount: int) -> void:
-	var score_label: Label = gui.get_node("%ScoreLabel")
+	var score_label: Label = hud.get_node("%ScoreLabel")
 	score += amount
 	score_label.text = str(score)
 
@@ -102,3 +97,59 @@ func _on_orb_collected() -> void:
 	# Play the `"lose_vision"` animation starting from the previous current position minus `seconds_restored` until the end
 	animation_player.stop()
 	animation_player.play_section("lose_vision", current_position - seconds_restored, -1.0)
+
+
+func _on_spawn_timer_timeout() -> void:
+	var dripstones: Node2D = dripstones_scene.instantiate()
+
+	dripstones.scale = dripstones_scale
+	dripstones.position = Vector2(x, randf_range(y_min, y_max))
+	dripstones.speed = dripstones_speed
+	dripstones.point_scored.connect(_on_point_scored)
+
+	if randf() < spawn_rate:
+		var orb: Area2D = orb_scene.instantiate()
+
+		orb.scale = orb_scale
+		orb.position = Vector2(
+			x + randf_range(added_x_range_min, added_x_range_max), randf_range(y_min, y_max)
+		)
+		orb.speed = dripstones_speed
+		orb.orb_collected.connect(_on_orb_collected)
+
+		self.add_child(orb)
+
+	self.add_child(dripstones)
+
+
+func _button_pressed() -> void:
+	get_tree().paused = false
+	get_tree().reload_current_scene()
+
+
+func _on_death_timer_timeout() -> void:
+	get_tree().paused = true
+
+	hud_layer.visible = false
+
+	var score_label: Label = game_over.get_node("%ScoreLabel")
+	score_label.text = "Score: %d" % score
+
+	game_over_layer.visible = true
+
+	retry_button.pressed.connect(_button_pressed)
+
+
+func _on_body_entered(body: Node2D) -> void:
+	if body.is_in_group("player"):
+		canvas_modulate.visible = false
+
+		for orb: Node2D in get_tree().get_nodes_in_group("orb"):
+			var orb_light: PointLight2D = orb.get_node("PointLight2D")
+			orb_light.visible = false
+
+		var player_light: PointLight2D = body.get_node("PointLight2D")
+		player_light.visible = false
+
+		death_timer.start()
+		await death_timer.timeout

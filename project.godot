@@ -27,6 +27,13 @@ window/size/viewport_height=1080
 window/size/mode=4
 window/stretch/mode="viewport"
 
+[global_group]
+
+kill_zone=""
+player=""
+dripstones=""
+orb=""
+
 [input]
 
 jump={
