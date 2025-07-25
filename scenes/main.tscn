@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://cwuceigf4buye" path="res://scenes/dripstones.tscn" id="2_sugp2"]
 [ext_resource type="PackedScene" uid="uid://by0077tgv1o31" path="res://scenes/orb.tscn" id="3_tefeu"]
 [ext_resource type="PackedScene" uid="uid://cl1l5qxj85lyg" path="res://scenes/kill_zone.tscn" id="4_jyhfs"]
-[ext_resource type="PackedScene" uid="uid://colf2nk0hqfsq" path="res://scenes/gui.tscn" id="5_tbgi4"]
+[ext_resource type="PackedScene" uid="uid://colf2nk0hqfsq" path="res://scenes/hud.tscn" id="5_tbgi4"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_tbgi4"]
 
