@@ -122,7 +122,6 @@ animation_player = NodePath("AnimationPlayer")
 animated_sprite = NodePath("AnimatedSprite2D")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-scale = Vector2(1, 1)
 sprite_frames = SubResource("SpriteFrames_qlg0r")
 animation = &"flap"
 autoplay = "idle"

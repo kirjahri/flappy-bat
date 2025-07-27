@@ -23,7 +23,7 @@ func _physics_process(delta: float) -> void:
 		if not animated_sprite.animation == "flap":
 			animated_sprite.play("idle")
 
-	if Input.is_action_just_pressed("jump"):
+	if Input.is_action_just_pressed("flap"):
 		velocity.y = jump_velocity
 
 		if not Input.is_action_pressed("dive"):
