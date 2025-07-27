@@ -11,4 +11,5 @@
 texture = ExtResource("1_xb8k7")
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="KillZone"]
-polygon = PackedVector2Array(7, 39, 7, -1, 0, -39, -7, -1, -7, 39)
+position = Vector2(0, 1)
+polygon = PackedVector2Array(13, 63, 8, -10, 0, -64, -8, -10, -14, 63)

@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://db2a1uk6ipw7k" path="res://scripts/dripstones.gd" id="1_peu2f"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_peu2f"]
-size = Vector2(2, 20)
+size = Vector2(2, 42)
 
 [node name="Dripstones" type="Node2D" node_paths=PackedStringArray("score_area") groups=["dripstones"]]
 script = ExtResource("1_peu2f")
@@ -12,11 +12,11 @@ score_area = NodePath("ScoreArea")
 speed = 500.0
 
 [node name="Dripstone" parent="." instance=ExtResource("1_56cwe")]
-position = Vector2(0, -50)
+position = Vector2(0, -85)
 rotation = 3.14159
 
 [node name="Dripstone2" parent="." instance=ExtResource("1_56cwe")]
-position = Vector2(0, 50)
+position = Vector2(0, 85)
 
 [node name="ScoreArea" type="Area2D" parent="."]
 

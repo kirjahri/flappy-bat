@@ -1,17 +1,17 @@
 [gd_scene load_steps=5 format=3 uid="uid://by0077tgv1o31"]
 
-[ext_resource type="Texture2D" uid="uid://dua0n4fheov00" path="res://assets/sprites/yellow-orb.png" id="1_ktqa0"]
 [ext_resource type="Script" uid="uid://cwi7yfmq7d77f" path="res://scripts/orb.gd" id="1_ubfm6"]
+[ext_resource type="Texture2D" uid="uid://cunukckmeodpy" path="res://assets/sprites/orb.png" id="2_g6cbt"]
 [ext_resource type="Texture2D" uid="uid://cer6vberudn13" path="res://assets/sprites/light.svg" id="3_g6cbt"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_ubfm6"]
-radius = 6.0
+radius = 3.0
 
 [node name="Orb" type="Area2D" groups=["orb"]]
 script = ExtResource("1_ubfm6")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("1_ktqa0")
+texture = ExtResource("2_g6cbt")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_ubfm6")

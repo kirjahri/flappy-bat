@@ -125,7 +125,7 @@ animated_sprite = NodePath("AnimatedSprite2D")
 sprite_frames = SubResource("SpriteFrames_qlg0r")
 animation = &"idle"
 autoplay = "idle"
-frame_progress = 0.318155
+frame_progress = 0.572454
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
 polygon = PackedVector2Array(7, -3, 3, -3, 0, -5, -3, -5, -7, -1, -8, 2, -7, 4, 0, 4, 0, 6, 4, 6, 4, 4, 7, 2)
