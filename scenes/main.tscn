@@ -80,7 +80,6 @@ position = Vector2(480, 540)
 jump_velocity = -600.0
 
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
-light_mask = 3
 color = Color(0, 0, 0, 1)
 
 [node name="HUDLayer" type="CanvasLayer" parent="."]
