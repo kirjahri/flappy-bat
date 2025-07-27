@@ -1,4 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://dwo685swb2ii7"]
+[gd_scene load_steps=3 format=3 uid="uid://dwo685swb2ii7"]
+
+[ext_resource type="Script" uid="uid://dpws0210o1olr" path="res://scripts/game_over.gd" id="1_xeevv"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0nqlu"]
 bg_color = Color(0, 0, 0, 0.8)
@@ -7,13 +9,16 @@ corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
 
-[node name="GameOver" type="Control"]
+[node name="GameOver" type="Control" node_paths=PackedStringArray("score_label", "best_score_label")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_xeevv")
+score_label = NodePath("Panel/VBoxContainer/HBoxContainer/ScoreLabel")
+best_score_label = NodePath("Panel/VBoxContainer/HBoxContainer/BestScoreLabel")
 
 [node name="Panel" type="Panel" parent="."]
 layout_mode = 1

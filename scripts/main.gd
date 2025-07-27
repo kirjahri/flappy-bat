@@ -132,14 +132,10 @@ func _on_death_timer_timeout() -> void:
 
 	hud_layer.visible = false
 
-	var score_label: Label = game_over.get_node("%ScoreLabel")
-	score_label.text = "Score: %d" % score
-
 	if score > Global.best_score:
 		Global.best_score = score
 
-	var best_score_label: Label = game_over.get_node("%BestScoreLabel")
-	best_score_label.text = "Best Score: %d" % Global.best_score
+	game_over.update_score_labels(score)
 
 	game_over_layer.visible = true
 
