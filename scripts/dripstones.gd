@@ -12,7 +12,8 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	self.position.x -= speed * delta
+	if not Global.in_death_state:
+		self.position.x -= speed * delta
 
 
 func _on_body_entered(_body: Node2D) -> void:

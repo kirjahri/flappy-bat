@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://e5k8yykw44jb"]
+[gd_scene load_steps=15 format=3 uid="uid://e5k8yykw44jb"]
 
 [ext_resource type="Script" uid="uid://prem0dk7od71" path="res://scripts/main.gd" id="1_0wfyh"]
 [ext_resource type="PackedScene" uid="uid://byn03koj8bqtk" path="res://scenes/player.tscn" id="1_o5qli"]
@@ -17,7 +17,44 @@ normal = Vector2(0, 1)
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_sugp2"]
 normal = Vector2(1, 0)
 
-[node name="Main" type="Node" node_paths=PackedStringArray("spawn_timer", "canvas_modulate", "destroy_area", "player", "hud", "hud_layer", "death_timer", "game_over", "game_over_layer")]
+[sub_resource type="Animation" id="Animation_tipki"]
+resource_name = "flash"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_85g3d"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_choun"]
+_data = {
+&"RESET": SubResource("Animation_85g3d"),
+&"flash": SubResource("Animation_tipki")
+}
+
+[node name="Main" type="Node" node_paths=PackedStringArray("spawn_timer", "canvas_modulate", "destroy_area", "player", "hud", "hud_layer", "death_timer", "death_flash", "game_over", "game_over_layer")]
 script = ExtResource("1_0wfyh")
 spawn_timer = NodePath("DripstonesTimer")
 canvas_modulate = NodePath("DarknessModulate")
@@ -35,6 +72,7 @@ player = NodePath("Player")
 hud = NodePath("HUDLayer/HUD")
 hud_layer = NodePath("HUDLayer")
 death_timer = NodePath("DeathTimer")
+death_flash = NodePath("DeathFlash")
 game_over = NodePath("GameOverLayer/GameOver")
 game_over_layer = NodePath("GameOverLayer")
 
@@ -45,10 +83,11 @@ script = ExtResource("4_tipki")
 wait_time = 0.8
 
 [node name="DeathTimer" type="Timer" parent="."]
-wait_time = 0.001
+wait_time = 2.0
 one_shot = true
 
 [node name="KillZone" parent="." instance=ExtResource("4_jyhfs")]
+visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="KillZone"]
 position = Vector2(0, 1080)
@@ -76,6 +115,7 @@ color = Color(0.35, 0.208892, 0.1435, 1)
 metadata/_edit_use_anchors_ = true
 
 [node name="Player" parent="." instance=ExtResource("1_o5qli")]
+z_index = 1
 position = Vector2(480, 540)
 jump_velocity = -600.0
 
@@ -92,3 +132,19 @@ layer = 2
 visible = false
 
 [node name="GameOver" parent="GameOverLayer" instance=ExtResource("7_o6xl0")]
+
+[node name="DeathFlash" type="ColorRect" parent="."]
+visible = false
+z_index = 2
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 4
+metadata/_edit_use_anchors_ = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="DeathFlash"]
+libraries = {
+&"": SubResource("AnimationLibrary_choun")
+}

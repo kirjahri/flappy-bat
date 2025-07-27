@@ -40,6 +40,8 @@ extends Node
 
 @export_group("Game Over")
 @export var death_timer: Timer
+@export var death_flash: ColorRect
+@export_range(-1000, 0, 0.2) var death_hop_velocity: float = -600.0
 
 @export_subgroup("UI")
 @export var game_over: Control
@@ -124,13 +126,12 @@ func _on_spawn_timer_timeout() -> void:
 
 func _button_pressed() -> void:
 	get_tree().paused = false
+	Global.in_death_state = false
 	get_tree().reload_current_scene()
 
 
 func _on_death_timer_timeout() -> void:
 	get_tree().paused = true
-
-	hud_layer.visible = false
 
 	if score > Global.best_score:
 		Global.best_score = score
@@ -144,14 +145,32 @@ func _on_death_timer_timeout() -> void:
 
 func _on_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player"):
+		hud_layer.visible = false
 		canvas_modulate.visible = false
+		Global.in_death_state = true
+
+		var player_light: PointLight2D = body.get_node("PointLight2D")
+		player_light.visible = false
 
 		for orb: Node2D in get_tree().get_nodes_in_group("orb"):
 			var orb_light: PointLight2D = orb.get_node("PointLight2D")
 			orb_light.visible = false
 
-		var player_light: PointLight2D = body.get_node("PointLight2D")
-		player_light.visible = false
+		var animation_player: AnimationPlayer = death_flash.get_node("AnimationPlayer")
+		death_flash.visible = true
+		animation_player.play("flash")
 
 		death_timer.start()
+
+		var collider: CollisionPolygon2D = body.get_node("CollisionPolygon2D")
+		collider.queue_free()
+
+		var animated_sprite: AnimatedSprite2D = body.get_node("AnimatedSprite2D")
+		animated_sprite.play("die")
+
+		# This check is for code completion
+		if body is CharacterBody2D:
+			body.velocity = Vector2.ZERO
+			body.velocity.y = death_hop_velocity
+
 		await death_timer.timeout

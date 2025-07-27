@@ -13,17 +13,17 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	if Input.is_action_pressed("dive"):
+	if Input.is_action_pressed("dive") and not Global.in_death_state:
 		velocity += get_gravity() * gravity_multiplier * dive_multiplier * delta
 
 		animated_sprite.play("dive")
 	else:
 		velocity += get_gravity() * gravity_multiplier * delta
 
-		if not animated_sprite.animation == "flap":
+		if not animated_sprite.animation == "flap" and not Global.in_death_state:
 			animated_sprite.play("idle")
 
-	if Input.is_action_just_pressed("flap"):
+	if Input.is_action_just_pressed("flap") and not Global.in_death_state:
 		velocity.y = jump_velocity
 
 		if not Input.is_action_pressed("dive"):
