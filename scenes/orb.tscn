@@ -17,6 +17,6 @@ texture = ExtResource("2_g6cbt")
 shape = SubResource("CircleShape2D_ubfm6")
 
 [node name="PointLight2D" type="PointLight2D" parent="."]
-scale = Vector2(0.025, 0.025)
+scale = Vector2(0.01, 0.01)
 blend_mode = 2
 texture = ExtResource("3_g6cbt")
