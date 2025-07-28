@@ -50,11 +50,17 @@ extends Node
 var score: int = 0
 var dripstones_speed: float
 
+@onready var animation_player: AnimationPlayer = player.get_node("AnimationPlayer")
+@onready var previous_animation_position: float = animation_player.current_animation_position
+
+@onready var vision_bar: ProgressBar = hud.get_node("%VisionBar")
 @onready var retry_button: Button = game_over.get_node("%RetryButton")
 
 
 func _ready() -> void:
 	dripstones_speed = dripstones_scene.instantiate().speed
+
+	vision_bar.max_value = animation_player.current_animation_length
 
 	destroy_area.area_entered.connect(_on_area_entered)
 	spawn_timer.timeout.connect(_on_spawn_timer_timeout)
@@ -63,7 +69,20 @@ func _ready() -> void:
 	spawn_timer.start()
 
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
+	# This check prevents the progress bar from jumping above where it should be
+	if not (
+		animation_player.current_animation_position < previous_animation_position - seconds_restored
+	):
+		vision_bar.value = lerp(
+			vision_bar.value,
+			animation_player.current_animation_length - animation_player.current_animation_position,
+			delta * 10
+		)
+		print()
+
+	previous_animation_position = animation_player.current_animation_position
+
 	for kill_zone: Area2D in get_tree().get_nodes_in_group("kill_zone"):
 		if not kill_zone.is_connected("body_entered", _on_body_entered):
 			kill_zone.body_entered.connect(_on_body_entered)
@@ -93,7 +112,6 @@ func _on_point_scored() -> void:
 
 
 func _on_orb_collected() -> void:
-	var animation_player: AnimationPlayer = player.get_node("AnimationPlayer")
 	var current_position: float = animation_player.current_animation_position
 
 	# Play the `"lose_vision"` animation starting from the previous current position minus `seconds_restored` until the end
@@ -156,9 +174,9 @@ func _on_body_entered(body: Node2D) -> void:
 			var orb_light: PointLight2D = orb.get_node("PointLight2D")
 			orb_light.visible = false
 
-		var animation_player: AnimationPlayer = death_flash.get_node("AnimationPlayer")
+		var flash_player: AnimationPlayer = death_flash.get_node("AnimationPlayer")
 		death_flash.visible = true
-		animation_player.play("flash")
+		flash_player.play("flash")
 
 		death_timer.start()
 

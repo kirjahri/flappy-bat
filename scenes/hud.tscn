@@ -1,4 +1,26 @@
-[gd_scene format=3 uid="uid://colf2nk0hqfsq"]
+[gd_scene load_steps=4 format=3 uid="uid://colf2nk0hqfsq"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_toqtt"]
+bg_color = Color(0, 0, 0, 0.5)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 0.5)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ahhtf"]
+bg_color = Color(0, 0, 0, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_oo0fn"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
 
 [node name="HUD" type="Control"]
 layout_mode = 3
@@ -22,3 +44,28 @@ theme_override_font_sizes/font_size = 64
 text = "0"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 2
+offset_left = 488.0
+offset_top = 1045.0
+offset_right = 1432.0
+offset_bottom = 1072.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_toqtt")
+
+[node name="MarginContainer2" type="MarginContainer" parent="PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="VisionBar" type="ProgressBar" parent="PanelContainer/MarginContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_styles/background = SubResource("StyleBoxFlat_ahhtf")
+theme_override_styles/fill = SubResource("StyleBoxFlat_oo0fn")
+max_value = 30.0
+value = 15.0
+show_percentage = false
