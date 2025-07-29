@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://e5k8yykw44jb"]
+[gd_scene load_steps=16 format=3 uid="uid://e5k8yykw44jb"]
 
 [ext_resource type="Script" uid="uid://prem0dk7od71" path="res://scripts/main.gd" id="1_0wfyh"]
 [ext_resource type="PackedScene" uid="uid://byn03koj8bqtk" path="res://scenes/player.tscn" id="1_o5qli"]
@@ -8,6 +8,7 @@
 [ext_resource type="Script" uid="uid://noar46y3kio4" path="res://scripts/global.gd" id="4_tipki"]
 [ext_resource type="PackedScene" uid="uid://colf2nk0hqfsq" path="res://scenes/hud.tscn" id="5_tbgi4"]
 [ext_resource type="PackedScene" uid="uid://dwo685swb2ii7" path="res://scenes/game_over.tscn" id="7_o6xl0"]
+[ext_resource type="PackedScene" uid="uid://dkm3krepc520" path="res://scenes/pause_screen.tscn" id="8_85g3d"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_tbgi4"]
 
@@ -54,7 +55,7 @@ _data = {
 &"flash": SubResource("Animation_tipki")
 }
 
-[node name="Main" type="Node" node_paths=PackedStringArray("spawn_timer", "canvas_modulate", "dripstones_destroy_area", "player", "hud", "hud_layer", "death_timer", "death_flash", "game_over", "game_over_layer")]
+[node name="Main" type="Node" node_paths=PackedStringArray("spawn_timer", "canvas_modulate", "dripstones_destroy_area", "player", "hud", "pause_screen", "death_timer", "death_flash", "game_over")]
 script = ExtResource("1_0wfyh")
 spawn_timer = NodePath("DripstonesTimer")
 canvas_modulate = NodePath("DarknessModulate")
@@ -71,11 +72,10 @@ seconds_of_vision_restored = 5.0
 orb_spawn_added_x_range_max = 300.0
 player = NodePath("Player")
 hud = NodePath("HUDLayer/HUD")
-hud_layer = NodePath("HUDLayer")
+pause_screen = NodePath("PauseScreenLayer/PauseScreen")
 death_timer = NodePath("DeathTimer")
 death_flash = NodePath("DeathFlash")
 game_over = NodePath("GameOverLayer/GameOver")
-game_over_layer = NodePath("GameOverLayer")
 main_menu_scene_path = "uid://duoh1i4vps2og"
 
 [node name="Global" type="Node" parent="."]
@@ -129,11 +129,18 @@ color = Color(0, 0, 0, 1)
 [node name="HUD" parent="HUDLayer" instance=ExtResource("5_tbgi4")]
 unique_name_in_owner = true
 
-[node name="GameOverLayer" type="CanvasLayer" parent="."]
+[node name="PauseScreenLayer" type="CanvasLayer" parent="."]
 layer = 2
+
+[node name="PauseScreen" parent="PauseScreenLayer" instance=ExtResource("8_85g3d")]
+process_mode = 3
 visible = false
 
+[node name="GameOverLayer" type="CanvasLayer" parent="."]
+layer = 2
+
 [node name="GameOver" parent="GameOverLayer" instance=ExtResource("7_o6xl0")]
+visible = false
 
 [node name="DeathFlash" type="ColorRect" parent="."]
 visible = false

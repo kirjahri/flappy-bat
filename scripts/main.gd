@@ -36,7 +36,9 @@ extends Node
 
 @export_group("HUD")
 @export var hud: Control
-@export var hud_layer: CanvasLayer
+
+@export_group("Pause Screen")
+@export var pause_screen: Control
 
 @export_group("Game Over")
 @export var death_timer: Timer
@@ -45,7 +47,6 @@ extends Node
 
 @export_subgroup("UI")
 @export var game_over: Control
-@export var game_over_layer: CanvasLayer
 @export_file("*.tscn") var main_menu_scene_path: String
 
 var score: int = 0
@@ -55,8 +56,13 @@ var dripstones_speed: float
 @onready var previous_animation_position: float = animation_player.current_animation_position
 
 @onready var vision_bar: ProgressBar = hud.get_node("%VisionBar")
-@onready var retry_button: Button = game_over.get_node("%RetryButton")
-@onready var exit_button: Button = game_over.get_node("%ExitButton")
+
+@onready var resume_button: Button = pause_screen.get_node("%ResumeButton")
+@onready var pause_screen_retry_button: Button = pause_screen.get_node("%RetryButton")
+@onready var pause_screen_exit_button: Button = pause_screen.get_node("%ExitButton")
+
+@onready var game_over_retry_button: Button = game_over.get_node("%RetryButton")
+@onready var game_over_exit_button: Button = game_over.get_node("%ExitButton")
 
 
 func _ready() -> void:
@@ -64,14 +70,27 @@ func _ready() -> void:
 
 	vision_bar.max_value = animation_player.current_animation_length
 
-	dripstones_destroy_area.area_entered.connect(_on_dripstones_destroy_area_entered)
 	spawn_timer.timeout.connect(_on_spawn_timer_timeout)
+
+	dripstones_destroy_area.area_entered.connect(_on_dripstones_destroy_area_entered)
+
+	resume_button.pressed.connect(_on_resume_button_pressed)
+	pause_screen_retry_button.pressed.connect(_on_retry_button_pressed)
+	pause_screen_exit_button.pressed.connect(_on_exit_button_pressed)
+
 	death_timer.timeout.connect(_on_death_timer_timeout)
+
+	game_over_retry_button.pressed.connect(_on_retry_button_pressed)
+	game_over_exit_button.pressed.connect(_on_exit_button_pressed)
 
 	spawn_timer.start()
 
 
 func _process(delta: float) -> void:
+	for kill_zone: Area2D in get_tree().get_nodes_in_group("kill_zone"):
+		if not kill_zone.is_connected("body_entered", _on_kill_zone_body_entered):
+			kill_zone.body_entered.connect(_on_kill_zone_body_entered)
+
 	# This check prevents the progress bar from jumping above where it should be
 	if not (
 		animation_player.current_animation_position
@@ -82,13 +101,14 @@ func _process(delta: float) -> void:
 			animation_player.current_animation_length - animation_player.current_animation_position,
 			delta * 10
 		)
-		print()
 
 	previous_animation_position = animation_player.current_animation_position
 
-	for kill_zone: Area2D in get_tree().get_nodes_in_group("kill_zone"):
-		if not kill_zone.is_connected("body_entered", _on_kill_zone_body_entered):
-			kill_zone.body_entered.connect(_on_kill_zone_body_entered)
+
+func _input(_event: InputEvent) -> void:
+	if Input.is_action_just_pressed("pause") and not game_over.visible:
+		get_tree().paused = true
+		pause_screen.visible = true
 
 
 func _on_dripstones_destroy_area_entered(area: Area2D) -> void:
@@ -142,9 +162,14 @@ func _on_spawn_timer_timeout() -> void:
 		orb.speed = dripstones_speed
 		orb.orb_collected.connect(_on_orb_collected)
 
-		self.add_child(orb)
+		add_child(orb)
 
-	self.add_child(dripstones)
+	add_child(dripstones)
+
+
+func _on_resume_button_pressed() -> void:
+	get_tree().paused = false
+	pause_screen.hide()
 
 
 func _on_retry_button_pressed() -> void:
@@ -162,29 +187,26 @@ func _on_exit_button_pressed() -> void:
 func _on_death_timer_timeout() -> void:
 	get_tree().paused = true
 
-	if score > Global.best_score:
-		Global.best_score = score
-
 	game_over.update_score_labels(score)
 
-	game_over_layer.visible = true
-
-	retry_button.pressed.connect(_on_retry_button_pressed)
-	exit_button.pressed.connect(_on_exit_button_pressed)
+	game_over.visible = true
 
 
 func _on_kill_zone_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player"):
-		hud_layer.visible = false
-		canvas_modulate.visible = false
+		hud.hide()
+		canvas_modulate.hide()
 		Global.in_death_state = true
 
+		if score > Global.best_score:
+			Global.best_score = score
+
 		var player_light: PointLight2D = body.get_node("PointLight2D")
-		player_light.visible = false
+		player_light.hide()
 
 		for orb: Node2D in get_tree().get_nodes_in_group("orb"):
 			var orb_light: PointLight2D = orb.get_node("PointLight2D")
-			orb_light.visible = false
+			orb_light.hide()
 
 		var flash_player: AnimationPlayer = death_flash.get_node("AnimationPlayer")
 		death_flash.visible = true

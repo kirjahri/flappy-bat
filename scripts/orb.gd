@@ -6,14 +6,14 @@ signal orb_collected
 
 
 func _ready() -> void:
-	self.body_entered.connect(_on_body_entered)
+	body_entered.connect(_on_body_entered)
 
 
 func _process(delta: float) -> void:
 	if not Global.in_death_state:
-		self.position.x -= speed * delta
+		position.x -= speed * delta
 
 
 func _on_body_entered(_body: Node2D) -> void:
-	self.queue_free()
+	queue_free()
 	orb_collected.emit()
