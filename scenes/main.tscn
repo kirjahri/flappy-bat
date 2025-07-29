@@ -77,6 +77,7 @@ death_timer = NodePath("DeathTimer")
 death_flash = NodePath("DeathFlash")
 game_over = NodePath("GameOverLayer/GameOver")
 game_over_layer = NodePath("GameOverLayer")
+main_menu_scene_path = "uid://duoh1i4vps2og"
 
 [node name="Global" type="Node" parent="."]
 script = ExtResource("4_tipki")

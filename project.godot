@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Flappy Bat"
-run/main_scene="uid://e5k8yykw44jb"
+run/main_scene="uid://duoh1i4vps2og"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
 
