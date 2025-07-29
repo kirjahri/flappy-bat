@@ -6,15 +6,15 @@ extends Node
 @export_group("Dripstones")
 
 @export var dripstones_scene: PackedScene
-@export var destroy_area: Area2D
+@export var dripstones_destroy_area: Area2D
 
-@export_subgroup("Spawn Position")
-@export var x: float
-@export var y_min: float
-@export var y_max: float
+@export_subgroup("Spawn")
+@export var dripstones_spawn_x: float
+@export var dripstones_spawn_y_min: float
+@export var dripstones_spawn_y_max: float
 
 @export_subgroup("Speed")
-@export_range(1, 100, 0.2) var added_speed: float = 5.0
+@export_range(1, 100, 0.2) var dripstones_added_speed: float = 5.0
 
 @export_subgroup("Scale")
 @export var dripstones_scale: Vector2 = Vector2(10, 10)
@@ -22,14 +22,14 @@ extends Node
 @export_group("Orb")
 @export var orb_scene: PackedScene
 @export var orb_scale: Vector2 = Vector2(2.5, 2.5)
-@export var spawn_rate: float = 1.0 / 3.0
+@export var orb_spawn_rate: float = 1.0 / 3.0
 
 # Defines how many seconds the animation that limits the player's vision is set back by orbs (0.0 restores nothing, 20.0 restores it all).
-@export_range(0, 30, 0.2) var seconds_restored: float = 2.0
+@export_range(0, 30, 0.2) var seconds_of_vision_restored: float = 2.0
 
 @export_subgroup("Spawn Position")
-@export var added_x_range_min: float = 100.0
-@export var added_x_range_max: float = 400.0
+@export var orb_spawn_added_x_range_min: float = 100.0
+@export var orb_spawn_added_x_range_max: float = 400.0
 
 @export_group("Player")
 @export var player: CharacterBody2D
@@ -64,7 +64,7 @@ func _ready() -> void:
 
 	vision_bar.max_value = animation_player.current_animation_length
 
-	destroy_area.area_entered.connect(_on_area_entered)
+	dripstones_destroy_area.area_entered.connect(_on_dripstones_destroy_area_entered)
 	spawn_timer.timeout.connect(_on_spawn_timer_timeout)
 	death_timer.timeout.connect(_on_death_timer_timeout)
 
@@ -74,7 +74,8 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	# This check prevents the progress bar from jumping above where it should be
 	if not (
-		animation_player.current_animation_position < previous_animation_position - seconds_restored
+		animation_player.current_animation_position
+		< previous_animation_position - seconds_of_vision_restored
 	):
 		vision_bar.value = lerp(
 			vision_bar.value,
@@ -86,24 +87,18 @@ func _process(delta: float) -> void:
 	previous_animation_position = animation_player.current_animation_position
 
 	for kill_zone: Area2D in get_tree().get_nodes_in_group("kill_zone"):
-		if not kill_zone.is_connected("body_entered", _on_body_entered):
-			kill_zone.body_entered.connect(_on_body_entered)
+		if not kill_zone.is_connected("body_entered", _on_kill_zone_body_entered):
+			kill_zone.body_entered.connect(_on_kill_zone_body_entered)
 
 
-func _on_area_entered(area: Area2D) -> void:
+func _on_dripstones_destroy_area_entered(area: Area2D) -> void:
 	area.queue_free()
-
-
-func increment_score(amount: int) -> void:
-	var score_label: Label = hud.get_node("%ScoreLabel")
-	score += amount
-	score_label.text = str(score)
 
 
 func _on_point_scored() -> void:
 	increment_score(1)
 
-	dripstones_speed += added_speed
+	dripstones_speed += dripstones_added_speed
 
 	# Make sure that existing dripstones and orbs have their speed changed too
 	for node: Node in get_tree().get_nodes_in_group("dripstones"):
@@ -118,23 +113,31 @@ func _on_orb_collected() -> void:
 
 	# Play the `"lose_vision"` animation starting from the previous current position minus `seconds_restored` until the end
 	animation_player.stop()
-	animation_player.play_section("lose_vision", current_position - seconds_restored, -1.0)
+	animation_player.play_section(
+		"lose_vision", current_position - seconds_of_vision_restored, -1.0
+	)
 
 
 func _on_spawn_timer_timeout() -> void:
 	var dripstones: Node2D = dripstones_scene.instantiate()
 
 	dripstones.scale = dripstones_scale
-	dripstones.position = Vector2(x, randf_range(y_min, y_max))
+	dripstones.position = Vector2(
+		dripstones_spawn_x, randf_range(dripstones_spawn_y_min, dripstones_spawn_y_max)
+	)
 	dripstones.speed = dripstones_speed
 	dripstones.point_scored.connect(_on_point_scored)
 
-	if randf() < spawn_rate:
+	if randf() < orb_spawn_rate:
 		var orb: Area2D = orb_scene.instantiate()
 
 		orb.scale = orb_scale
 		orb.position = Vector2(
-			x + randf_range(added_x_range_min, added_x_range_max), randf_range(y_min, y_max)
+			(
+				dripstones_spawn_x
+				+ randf_range(orb_spawn_added_x_range_min, orb_spawn_added_x_range_max)
+			),
+			randf_range(dripstones_spawn_y_min, dripstones_spawn_y_max)
 		)
 		orb.speed = dripstones_speed
 		orb.orb_collected.connect(_on_orb_collected)
@@ -170,7 +173,7 @@ func _on_death_timer_timeout() -> void:
 	exit_button.pressed.connect(_on_exit_button_pressed)
 
 
-func _on_body_entered(body: Node2D) -> void:
+func _on_kill_zone_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player"):
 		hud_layer.visible = false
 		canvas_modulate.visible = false
@@ -201,3 +204,9 @@ func _on_body_entered(body: Node2D) -> void:
 			body.velocity.y = death_hop_velocity
 
 		await death_timer.timeout
+
+
+func increment_score(amount: int) -> void:
+	var score_label: Label = hud.get_node("%ScoreLabel")
+	score += amount
+	score_label.text = str(score)
