@@ -54,22 +54,21 @@ _data = {
 &"flash": SubResource("Animation_tipki")
 }
 
-[node name="Main" type="Node" node_paths=PackedStringArray("spawn_timer", "canvas_modulate", "destroy_area", "player", "hud", "hud_layer", "death_timer", "death_flash", "game_over", "game_over_layer")]
+[node name="Main" type="Node" node_paths=PackedStringArray("spawn_timer", "canvas_modulate", "dripstones_destroy_area", "player", "hud", "hud_layer", "death_timer", "death_flash", "game_over", "game_over_layer")]
 script = ExtResource("1_0wfyh")
 spawn_timer = NodePath("DripstonesTimer")
 canvas_modulate = NodePath("DarknessModulate")
 dripstones_scene = ExtResource("2_sugp2")
-destroy_area = NodePath("DripstonesDestroyArea")
-x = 2120.0
-y_min = 350.0
-y_max = 750.0
-added_speed = 3.0
+dripstones_destroy_area = NodePath("DripstonesDestroyArea")
+dripstones_spawn_x = 2120.0
+dripstones_spawn_y_min = 350.0
+dripstones_spawn_y_max = 750.0
 dripstones_scale = Vector2(5, 5)
 orb_scene = ExtResource("3_tefeu")
 orb_scale = Vector2(5, 5)
-spawn_rate = 0.2
-seconds_restored = 5.0
-added_x_range_max = 300.0
+orb_spawn_rate = 0.2
+seconds_of_vision_restored = 5.0
+orb_spawn_added_x_range_max = 300.0
 player = NodePath("Player")
 hud = NodePath("HUDLayer/HUD")
 hud_layer = NodePath("HUDLayer")
